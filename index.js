@@ -9,6 +9,7 @@ function wrap(superagent, Promise) {
    */
   function PromiseRequest() {
     superagent.Request.apply(this, arguments);
+    this.abort = this.abort.bind(this);
   }
 
   // Inherit form superagent.Request
@@ -61,61 +62,70 @@ function wrap(superagent, Promise) {
   };
 
   /** Helper for making an options request */
-  request.options = function(url) {
-    return request('OPTIONS', url);
+  request.options = function(url, abortCb) {
+    var req = request('OPTIONS', url);
+    if(abortCb)
+      abortCb(req.abort);
+    return req;
   }
 
   /** Helper for making a head request */
-  request.head = function(url, data) {
+  request.head = function(url, data, abortCb) {
     var req = request('HEAD', url);
-    if (data) {
+    if (data)
       req.send(data);
-    }
+    if(abortCb)
+      abortCb(req.abort);
     return req;
   };
 
   /** Helper for making a get request */
-  request.get = function(url, data) {
+  request.get = function(url, data, abortCb) {
     var req = request('GET', url);
-    if (data) {
+    if (data)
       req.query(data);
-    }
+    if(abortCb)
+      abortCb(req.abort);
     return req;
   };
 
   /** Helper for making a post request */
-  request.post = function(url, data) {
+  request.post = function(url, data, abortCb) {
     var req = request('POST', url);
-    if (data) {
+    if (data)
       req.send(data);
-    }
+    if(abortCb)
+      abortCb(req.abort);
     return req;
   };
 
   /** Helper for making a put request */
-  request.put = function(url, data) {
+  request.put = function(url, data, abortCb) {
     var req = request('PUT', url);
-    if (data) {
+    if (data)
       req.send(data);
-    }
+    if(abortCb)
+      abortCb(req.abort);
     return req;
   };
 
   /** Helper for making a patch request */
-  request.patch = function(url, data) {
+  request.patch = function(url, data, abortCb) {
     var req = request('PATCH', url);
-    if (data) {
+    if (data)
       req.send(data);
-    }
+    if(abortCb)
+      abortCb(req.abort);
     return req;
   };
 
   /** Helper for making a delete request */
-  request.del = function(url, data) {
+  request.del = function(url, data, abortCb) {
     var req = request('DELETE', url);
-    if (data) {
+    if (data)
       req.send(data);
-    }
+    if(abortCb)
+      abortCb(req.abort);
     return req;
   };
 
